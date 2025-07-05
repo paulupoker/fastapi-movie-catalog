@@ -1,3 +1,5 @@
+from pydantic import AnyHttpUrl
+
 from schemas.movie_description import MovieDescription
 
 MOVIES = [
@@ -11,6 +13,7 @@ MOVIES = [
         year=1994,
         director="Люк Бессон",
         rating=8.7,
+        url=AnyHttpUrl("https://www.kinopoisk.ru/film/389/"),
     ),
     MovieDescription(
         id=2,
@@ -26,6 +29,7 @@ MOVIES = [
         year=2013,
         director="Дэн Гилрой",
         rating=7.4,
+        url=AnyHttpUrl("https://www.kinopoisk.ru/film/760815/"),
     ),
     MovieDescription(
         id=3,
@@ -43,5 +47,6 @@ MOVIES = [
         year=2019,
         director="Гай Ричи",
         rating=8.6,
+        url=AnyHttpUrl("https://www.kinopoisk.ru/film/1143242/"),
     ),
 ]

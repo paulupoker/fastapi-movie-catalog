@@ -1,5 +1,6 @@
 from pydantic import (
     BaseModel,
+    AnyHttpUrl,
 )
 
 
@@ -11,6 +12,7 @@ class MovieDescriptionBase(BaseModel):
     year: int
     director: str
     rating: float
+    url: AnyHttpUrl
 
 
 class MovieDescription(MovieDescriptionBase):
