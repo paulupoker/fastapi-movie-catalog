@@ -1,6 +1,13 @@
 from typing import Annotated
-
-from fastapi import Depends, APIRouter
+from random import randint
+from fastapi import (
+    Depends,
+    APIRouter,
+    status,
+    Form,
+)
+from annotated_types import MaxLen
+from pydantic import AnyHttpUrl
 
 from .dependencies import (
     prefetch_movie_description,
@@ -34,3 +41,29 @@ def read_movie(
 ) -> MovieDescription:
 
     return movie
+
+
+@router.post(
+    "/",
+    response_model=MovieDescription,
+    status_code=status.HTTP_201_CREATED,
+)
+def add_movie(
+    title: Annotated[str, MaxLen(100), Form()],
+    description: Annotated[str, MaxLen(1000), Form()],
+    genre: Annotated[str, MaxLen(100), Form()],
+    year: Annotated[int, Form()],
+    director: Annotated[str, MaxLen(100), Form()],
+    rating: Annotated[float, Form()],
+    url: Annotated[AnyHttpUrl, Form()],
+) -> MovieDescription:
+    return MovieDescription(
+        id=randint(1, 1000),
+        title=title,
+        description=description,
+        genre=genre,
+        year=year,
+        director=director,
+        rating=rating,
+        url=url,
+    )
