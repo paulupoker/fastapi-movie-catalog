@@ -4,7 +4,6 @@ from fastapi import (
     APIRouter,
     status,
 )
-from random import randint
 
 from .dependencies import (
     prefetch_movie_description,
@@ -30,7 +29,7 @@ def read_movie_list():
 
 
 @router.get(
-    "/{id}/",
+    "/{slug}/",
     response_model=MovieDescription,
 )
 def read_movie(
@@ -53,6 +52,5 @@ def create_movie(
 ) -> MovieDescription:
 
     return MovieDescription(
-        id=randint(1, 1000),
         **movie.model_dump(),
     )

@@ -7,7 +7,7 @@ from typing import Annotated
 
 
 class MovieDescriptionBase(BaseModel):
-    id: int
+    slug: str
     title: str
     description: str
     genre: str
@@ -28,6 +28,7 @@ class MovieDescriptionCreate(BaseModel):
     Model for creation movie description.
     """
 
+    slug: str = Field(max_length=30)
     title: str = Field(max_length=100)
     description: str = Field(max_length=1000)
     genre: str = Field(max_length=100)

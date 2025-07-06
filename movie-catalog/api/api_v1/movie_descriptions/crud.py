@@ -4,8 +4,8 @@ from schemas.movie_description import MovieDescription
 
 MOVIES = [
     MovieDescription(
-        id=1,
-        title="Léon",
+        slug="leon",
+        title="Леон",
         description="Профессиональный убийца Леон неожиданно для себя самого "
         "решает помочь 12-летней соседке Матильде, семью которой "
         "убили коррумпированные полицейские.",
@@ -16,7 +16,7 @@ MOVIES = [
         url=AnyHttpUrl("https://www.kinopoisk.ru/film/389/"),
     ),
     MovieDescription(
-        id=2,
+        slug="stringer",
         title="Стрингер",
         description="Луи Блум пытается найти работу. После того как он видит, "
         "как любительская съемочная группа снимает автомобильную "
@@ -32,7 +32,7 @@ MOVIES = [
         url=AnyHttpUrl("https://www.kinopoisk.ru/film/760815/"),
     ),
     MovieDescription(
-        id=3,
+        slug="dzhentlmeny",
         title="Джентльмены",
         description="Один ушлый американец ещё со студенческих лет приторговывал "
         "наркотиками, а теперь придумал схему нелегального обогащения "
