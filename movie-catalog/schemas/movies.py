@@ -3,7 +3,6 @@ from pydantic import (
     AnyHttpUrl,
     Field,
 )
-from typing import Annotated
 
 
 class MovieBase(BaseModel):
@@ -23,7 +22,7 @@ class Movie(MovieBase):
     """
 
 
-class MovieCreate(BaseModel):
+class MovieCreate(MovieBase):
     """
     Model for creating a movie.
     """
@@ -35,4 +34,3 @@ class MovieCreate(BaseModel):
     year: int = Field(ge=1900, le=3000)
     director: str = Field(max_length=100)
     rating: float = Field(ge=1, le=10)
-    url: Annotated[str, AnyHttpUrl]
