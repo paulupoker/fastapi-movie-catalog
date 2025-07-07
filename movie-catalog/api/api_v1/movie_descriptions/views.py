@@ -6,23 +6,23 @@ from fastapi import (
 )
 
 from .dependencies import (
-    prefetch_movie_description,
+    prefetch_movie,
 )
 from .crud import MOVIES
-from schemas.movie_description import (
-    MovieDescription,
-    MovieDescriptionCreate,
+from schemas.movies import (
+    Movie,
+    MovieCreate,
 )
 
 router = APIRouter(
     prefix="/movies",
-    tags=["Movie Descriptions"],
+    tags=["Movies"],
 )
 
 
 @router.get(
     "/",
-    response_model=list[MovieDescription],
+    response_model=list[Movie],
 )
 def read_movie_list():
     return MOVIES
@@ -30,27 +30,27 @@ def read_movie_list():
 
 @router.get(
     "/{slug}/",
-    response_model=MovieDescription,
+    response_model=Movie,
 )
 def read_movie(
     movie: Annotated[
-        MovieDescription,
-        Depends(prefetch_movie_description),
+        Movie,
+        Depends(prefetch_movie),
     ],
-) -> MovieDescription:
+) -> Movie:
 
     return movie
 
 
 @router.post(
     "/",
-    response_model=MovieDescription,
+    response_model=Movie,
     status_code=status.HTTP_201_CREATED,
 )
 def create_movie(
-    movie: MovieDescriptionCreate,
-) -> MovieDescription:
+    movie: MovieCreate,
+) -> Movie:
 
-    return MovieDescription(
+    return Movie(
         **movie.model_dump(),
     )

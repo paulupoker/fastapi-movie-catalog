@@ -1,9 +1,9 @@
 from pydantic import AnyHttpUrl
 
-from schemas.movie_description import MovieDescription
+from schemas.movies import Movie
 
 MOVIES = [
-    MovieDescription(
+    Movie(
         slug="leon",
         title="Леон",
         description="Профессиональный убийца Леон неожиданно для себя самого "
@@ -15,7 +15,7 @@ MOVIES = [
         rating=8.7,
         url=AnyHttpUrl("https://www.kinopoisk.ru/film/389/"),
     ),
-    MovieDescription(
+    Movie(
         slug="stringer",
         title="Стрингер",
         description="Луи Блум пытается найти работу. После того как он видит, "
@@ -31,7 +31,7 @@ MOVIES = [
         rating=7.4,
         url=AnyHttpUrl("https://www.kinopoisk.ru/film/760815/"),
     ),
-    MovieDescription(
+    Movie(
         slug="dzhentlmeny",
         title="Джентльмены",
         description="Один ушлый американец ещё со студенческих лет приторговывал "

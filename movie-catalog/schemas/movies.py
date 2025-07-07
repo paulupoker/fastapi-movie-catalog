@@ -6,7 +6,7 @@ from pydantic import (
 from typing import Annotated
 
 
-class MovieDescriptionBase(BaseModel):
+class MovieBase(BaseModel):
     slug: str
     title: str
     description: str
@@ -17,15 +17,15 @@ class MovieDescriptionBase(BaseModel):
     url: AnyHttpUrl
 
 
-class MovieDescription(MovieDescriptionBase):
+class Movie(MovieBase):
     """
     Movie description model.
     """
 
 
-class MovieDescriptionCreate(BaseModel):
+class MovieCreate(BaseModel):
     """
-    Model for creation movie description.
+    Model for creating a movie.
     """
 
     slug: str = Field(max_length=30)

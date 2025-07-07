@@ -1,15 +1,17 @@
-from fastapi import HTTPException
-from starlette import status
+from fastapi import (
+    HTTPException,
+    status,
+)
 
 from .crud import MOVIES
-from schemas.movie_description import MovieDescription
+from schemas.movies import Movie
 
 
-def prefetch_movie_description(
+def prefetch_movie(
     movie_slug: str,
-) -> MovieDescription:
+) -> Movie:
 
-    movie: MovieDescription | None = next(
+    movie: Movie | None = next(
         (movie for movie in MOVIES if movie.slug == movie_slug),
         None,
     )
