@@ -1,9 +1,32 @@
-from pydantic import AnyHttpUrl
+from pydantic import (
+    BaseModel,
+    AnyHttpUrl,
+)
 
-from schemas.movies import Movie
+from schemas.movies import Movie, MovieCreate
 
-MOVIES = [
-    Movie(
+
+class MoviesStorage(BaseModel):
+    slug_to_movie: dict[str, Movie] = {}
+
+    def get(self) -> list[Movie]:
+        return list(self.slug_to_movie.values())
+
+    def get_by_slug(self, slug: str) -> Movie | None:
+        return self.slug_to_movie.get(slug)
+
+    def create(self, movie_in: MovieCreate) -> Movie:
+        movie = Movie(
+            **movie_in.model_dump(),
+        )
+        self.slug_to_movie[movie.slug] = movie
+        return movie
+
+
+storage = MoviesStorage()
+
+storage.create(
+    MovieCreate(
         slug="leon",
         title="Леон",
         description="Профессиональный убийца Леон неожиданно для себя самого "
@@ -13,9 +36,12 @@ MOVIES = [
         year=1994,
         director="Люк Бессон",
         rating=8.7,
-        url=AnyHttpUrl("https://www.kinopoisk.ru/film/389/"),
-    ),
-    Movie(
+        url="https://www.kinopoisk.ru/film/389/",
+    )
+),
+
+storage.create(
+    MovieCreate(
         slug="stringer",
         title="Стрингер",
         description="Луи Блум пытается найти работу. После того как он видит, "
@@ -29,9 +55,12 @@ MOVIES = [
         year=2013,
         director="Дэн Гилрой",
         rating=7.4,
-        url=AnyHttpUrl("https://www.kinopoisk.ru/film/760815/"),
-    ),
-    Movie(
+        url="https://www.kinopoisk.ru/film/760815/",
+    )
+),
+
+storage.create(
+    MovieCreate(
         slug="dzhentlmeny",
         title="Джентльмены",
         description="Один ушлый американец ещё со студенческих лет приторговывал "
@@ -47,6 +76,6 @@ MOVIES = [
         year=2019,
         director="Гай Ричи",
         rating=8.6,
-        url=AnyHttpUrl("https://www.kinopoisk.ru/film/1143242/"),
-    ),
-]
+        url="https://www.kinopoisk.ru/film/1143242/",
+    )
+)

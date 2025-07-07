@@ -8,7 +8,7 @@ from fastapi import (
 from .dependencies import (
     prefetch_movie,
 )
-from .crud import MOVIES
+from .crud import storage
 from schemas.movies import (
     Movie,
     MovieCreate,
@@ -24,8 +24,8 @@ router = APIRouter(
     "/",
     response_model=list[Movie],
 )
-def read_movie_list():
-    return MOVIES
+def read_movie_list() -> list[Movie]:
+    return storage.get()
 
 
 @router.get(
@@ -38,7 +38,6 @@ def read_movie(
         Depends(prefetch_movie),
     ],
 ) -> Movie:
-
     return movie
 
 
@@ -50,7 +49,4 @@ def read_movie(
 def create_movie(
     movie: MovieCreate,
 ) -> Movie:
-
-    return Movie(
-        **movie.model_dump(),
-    )
+    return storage.create(movie)
