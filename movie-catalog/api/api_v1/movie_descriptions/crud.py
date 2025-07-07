@@ -22,6 +22,12 @@ class MoviesStorage(BaseModel):
         self.slug_to_movie[movie.slug] = movie
         return movie
 
+    def delete_by_slug(self, slug: str) -> None:
+        self.slug_to_movie.pop(slug, None)
+
+    def delete(self, movie: Movie) -> None:
+        self.delete_by_slug(slug=movie.slug)
+
 
 storage = MoviesStorage()
 
@@ -36,7 +42,7 @@ storage.create(
         year=1994,
         director="Люк Бессон",
         rating=8.7,
-        url="https://www.kinopoisk.ru/film/389/",
+        url=AnyHttpUrl("https://www.kinopoisk.ru/film/389/"),
     )
 ),
 
@@ -55,7 +61,7 @@ storage.create(
         year=2013,
         director="Дэн Гилрой",
         rating=7.4,
-        url="https://www.kinopoisk.ru/film/760815/",
+        url=AnyHttpUrl("https://www.kinopoisk.ru/film/760815/"),
     )
 ),
 
@@ -76,6 +82,6 @@ storage.create(
         year=2019,
         director="Гай Ричи",
         rating=8.6,
-        url="https://www.kinopoisk.ru/film/1143242/",
+        url=AnyHttpUrl("https://www.kinopoisk.ru/film/1143242/"),
     )
 )

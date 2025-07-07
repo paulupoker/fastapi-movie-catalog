@@ -31,6 +31,18 @@ def read_movie_list() -> list[Movie]:
 @router.get(
     "/{slug}/",
     response_model=Movie,
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "description": "Movie not found",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "detail": f"Movie with slug 'slug' not found",
+                    },
+                },
+            },
+        },
+    },
 )
 def read_movie(
     movie: Annotated[
@@ -50,3 +62,28 @@ def create_movie(
     movie: MovieCreate,
 ) -> Movie:
     return storage.create(movie)
+
+
+@router.delete(
+    "/{slug}/",
+    status_code=status.HTTP_204_NO_CONTENT,
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "description": "Movie not found",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "detail": f"Movie with slug 'slug' not found",
+                    },
+                },
+            },
+        },
+    },
+)
+def delete_movie(
+    movie: Annotated[
+        Movie,
+        Depends(prefetch_movie),
+    ],
+) -> None:
+    storage.delete(movie=movie)
