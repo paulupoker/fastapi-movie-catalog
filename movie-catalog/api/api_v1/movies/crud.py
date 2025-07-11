@@ -3,7 +3,11 @@ from pydantic import (
     AnyHttpUrl,
 )
 
-from schemas.movies import Movie, MovieCreate
+from schemas.movies import (
+    Movie,
+    MovieCreate,
+    MovieUpdate,
+)
 
 
 class MoviesStorage(BaseModel):
@@ -27,6 +31,15 @@ class MoviesStorage(BaseModel):
 
     def delete(self, movie: Movie) -> None:
         self.delete_by_slug(slug=movie.slug)
+
+    def update(
+        self,
+        movie: Movie,
+        movie_in: MovieUpdate,
+    ) -> Movie:
+        for field_name, value in movie_in:
+            setattr(movie, field_name, value)
+        return movie
 
 
 storage = MoviesStorage()
