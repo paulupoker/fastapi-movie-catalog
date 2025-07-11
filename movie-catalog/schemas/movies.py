@@ -18,7 +18,7 @@ class MovieBase(BaseModel):
 
 class Movie(MovieBase):
     """
-    Movie description model.
+    Movie model.
     """
 
 
