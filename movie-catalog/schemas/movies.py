@@ -3,6 +3,15 @@ from pydantic import (
     AnyHttpUrl,
     Field,
 )
+from typing import Annotated
+
+SlugString = Annotated[str, Field(max_length=30)]
+TitleString = Annotated[str, Field(max_length=100)]
+DescriptionString = Annotated[str, Field(max_length=1000)]
+GenreString = Annotated[str, Field(max_length=100)]
+YearInt = Annotated[int, Field(ge=1900, le=3000)]
+DirectorString = Annotated[str, Field(max_length=100)]
+RatingFloat = Annotated[float, Field(ge=1, le=10)]
 
 
 class MovieBase(BaseModel):
@@ -28,13 +37,13 @@ class MovieCreate(MovieBase):
     Model for creating a movie.
     """
 
-    slug: str = Field(max_length=30)
-    title: str = Field(max_length=100)
-    description: str = Field(max_length=1000)
-    genre: str = Field(max_length=100)
-    year: int = Field(ge=1900, le=3000)
-    director: str = Field(max_length=100)
-    rating: float = Field(ge=1, le=10)
+    slug: SlugString
+    title: TitleString
+    description: DescriptionString
+    genre: GenreString
+    year: YearInt
+    director: DirectorString
+    rating: RatingFloat
 
 
 class MovieUpdate(MovieBase):
@@ -42,9 +51,9 @@ class MovieUpdate(MovieBase):
     Model for updating a movie.
     """
 
-    title: str = Field(max_length=100)
-    description: str = Field(max_length=1000)
-    genre: str = Field(max_length=100)
-    year: int = Field(ge=1900, le=3000)
-    director: str = Field(max_length=100)
-    rating: float = Field(ge=1, le=10)
+    title: TitleString
+    description: DescriptionString
+    genre: GenreString
+    year: YearInt
+    director: DirectorString
+    rating: RatingFloat
