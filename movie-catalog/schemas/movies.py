@@ -57,3 +57,17 @@ class MovieUpdate(MovieBase):
     year: YearInt
     director: DirectorString
     rating: RatingFloat
+
+
+class MoviePartialUpdate(MovieBase):
+    """
+    Model for partial movie update.
+    """
+
+    title: TitleString | None = None
+    description: DescriptionString | None = None
+    genre: GenreString | None = None
+    year: YearInt | None = None
+    director: DirectorString | None = None
+    rating: RatingFloat | None = None
+    url: AnyHttpUrl | None = None
