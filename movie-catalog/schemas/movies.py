@@ -30,6 +30,15 @@ class Movie(MovieBase):
     """
 
     slug: str
+    notes: str | None = None
+
+
+class MovieRead(MovieBase):
+    """
+    Model for reading movie data.
+    """
+
+    slug: str
 
 
 class MovieCreate(MovieBase):
