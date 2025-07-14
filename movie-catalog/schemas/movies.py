@@ -5,12 +5,12 @@ from pydantic import (
 )
 from typing import Annotated
 
-SlugString = Annotated[str, Field(max_length=30)]
-TitleString = Annotated[str, Field(max_length=100)]
-DescriptionString = Annotated[str, Field(max_length=1000)]
-GenreString = Annotated[str, Field(max_length=100)]
+SlugString = Annotated[str, Field(min_length=3, max_length=30)]
+TitleString = Annotated[str, Field(min_length=2, max_length=100)]
+DescriptionString = Annotated[str, Field(min_length=2, max_length=1000)]
+GenreString = Annotated[str, Field(min_length=2, max_length=100)]
 YearInt = Annotated[int, Field(ge=1900, le=3000)]
-DirectorString = Annotated[str, Field(max_length=100)]
+DirectorString = Annotated[str, Field(min_length=2, max_length=100)]
 RatingFloat = Annotated[float, Field(ge=1, le=10)]
 
 
