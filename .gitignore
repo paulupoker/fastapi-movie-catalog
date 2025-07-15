@@ -9,7 +9,8 @@ wheels/
 # Virtual environments
 .venv
 
-
+# MoviesStorage
+movies.json
 
 
 # Byte-compiled / optimized / DLL files
