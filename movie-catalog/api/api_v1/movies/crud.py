@@ -1,8 +1,9 @@
 from pydantic import (
     BaseModel,
-    AnyHttpUrl,
+    ValidationError,
 )
 
+from core.config import MOVIES_STORAGE_FILEPATH
 from schemas.movies import (
     Movie,
     MovieCreate,
@@ -13,6 +14,15 @@ from schemas.movies import (
 
 class MoviesStorage(BaseModel):
     slug_to_movie: dict[str, Movie] = {}
+
+    def save_state(self) -> None:
+        MOVIES_STORAGE_FILEPATH.write_text(self.model_dump_json(indent=2))
+
+    @classmethod
+    def from_state(cls) -> "MoviesStorage":
+        if not MOVIES_STORAGE_FILEPATH.exists():
+            return MoviesStorage()
+        return cls.model_validate_json(MOVIES_STORAGE_FILEPATH.read_text())
 
     def get(self) -> list[Movie]:
         return list(self.slug_to_movie.values())
@@ -25,10 +35,12 @@ class MoviesStorage(BaseModel):
             **movie_in.model_dump(),
         )
         self.slug_to_movie[movie.slug] = movie
+        self.save_state()
         return movie
 
     def delete_by_slug(self, slug: str) -> None:
         self.slug_to_movie.pop(slug, None)
+        self.save_state()
 
     def delete(self, movie: Movie) -> None:
         self.delete_by_slug(slug=movie.slug)
@@ -40,6 +52,7 @@ class MoviesStorage(BaseModel):
     ) -> Movie:
         for field_name, value in movie_in:
             setattr(movie, field_name, value)
+            self.save_state()
         return movie
 
     def update_partial(
@@ -49,62 +62,12 @@ class MoviesStorage(BaseModel):
     ) -> Movie:
         for field_name, value in movie_in.model_dump(exclude_unset=True).items():
             setattr(movie, field_name, value)
+        self.save_state()
         return movie
 
 
-storage = MoviesStorage()
-
-storage.create(
-    MovieCreate(
-        slug="leon",
-        title="Леон",
-        description="Профессиональный убийца Леон неожиданно для себя самого "
-        "решает помочь 12-летней соседке Матильде, семью которой "
-        "убили коррумпированные полицейские.",
-        genre="боевик, триллер, драма, криминал",
-        year=1994,
-        director="Люк Бессон",
-        rating=8.7,
-        url=AnyHttpUrl("https://www.kinopoisk.ru/film/389/"),
-    )
-),
-
-storage.create(
-    MovieCreate(
-        slug="stringer",
-        title="Стрингер",
-        description="Луи Блум пытается найти работу. После того как он видит, "
-        "как любительская съемочная группа снимает автомобильную "
-        "аварию, он меняет ворованный велосипед на камеру и снимает "
-        "последствия угона автомобиля, чтобы продать местной телевизионной "
-        "компании. Директор новостей Нина покупает запись и убеждает его "
-        "продолжить работу. Вскоре становится ясно, что ради по-настоящему "
-        "стоящего материала Луи не остановится ни перед чем...",
-        genre="триллер, драма, криминал",
-        year=2013,
-        director="Дэн Гилрой",
-        rating=7.4,
-        url=AnyHttpUrl("https://www.kinopoisk.ru/film/760815/"),
-    )
-),
-
-storage.create(
-    MovieCreate(
-        slug="dzhentlmeny",
-        title="Джентльмены",
-        description="Один ушлый американец ещё со студенческих лет приторговывал "
-        "наркотиками, а теперь придумал схему нелегального обогащения "
-        "с использованием поместий обедневшей английской аристократии "
-        "и очень неплохо на этом разбогател. Другой пронырливый журналист "
-        "приходит к Рэю, правой руке американца, и предлагает тому купить "
-        "киносценарий, в котором подробно описаны преступления его босса "
-        "при участии других представителей лондонского криминального "
-        "мира — партнёра-еврея, китайской диаспоры, чернокожих спортсменов "
-        "и даже русского олигарха.",
-        genre="криминал, комедия, боевик",
-        year=2019,
-        director="Гай Ричи",
-        rating=8.6,
-        url=AnyHttpUrl("https://www.kinopoisk.ru/film/1143242/"),
-    )
-)
+try:
+    storage = MoviesStorage.from_state()
+except ValidationError:
+    storage = MoviesStorage()
+    storage.save_state()
