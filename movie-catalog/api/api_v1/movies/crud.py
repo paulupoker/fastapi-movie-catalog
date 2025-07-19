@@ -30,6 +30,19 @@ class MoviesStorage(BaseModel):
             return MoviesStorage()
         return cls.model_validate_json(MOVIES_STORAGE_FILEPATH.read_text())
 
+    def init_storage_from_state(self) -> None:
+        try:
+            data = MoviesStorage.from_state()
+        except ValidationError:
+            self.save_state()
+            logger.warning("Rewritten storage file due to validation error.")
+            return
+
+        self.slug_to_movie.update(
+            data.slug_to_movie,
+        )
+        logger.warning("Recovered data from storage file.")
+
     def get(self) -> list[Movie]:
         return list(self.slug_to_movie.values())
 
@@ -73,10 +86,4 @@ class MoviesStorage(BaseModel):
         return movie
 
 
-try:
-    storage = MoviesStorage.from_state()
-    logger.warning("Recovered data from storage file.")
-except ValidationError:
-    storage = MoviesStorage()
-    storage.save_state()
-    logger.warning("Rewritten storage file due to validation error.")
+storage = MoviesStorage()
