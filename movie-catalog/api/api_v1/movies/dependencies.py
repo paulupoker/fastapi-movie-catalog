@@ -6,7 +6,11 @@ from fastapi import (
     status,
     BackgroundTasks,
     Request,
-    Header,
+)
+from fastapi.params import Depends
+from fastapi.security import (
+    HTTPAuthorizationCredentials,
+    HTTPBearer,
 )
 
 from schemas.movies import Movie
@@ -22,6 +26,12 @@ UNSAFE_METHODS = frozenset(
         "PATCH",
         "DELETE",
     }
+)
+
+static_api_token = HTTPBearer(
+    scheme_name="Static API token",
+    description="Your **Static API token** from the developer portal. [Read more](#)",
+    auto_error=False,
 )
 
 
@@ -52,14 +62,20 @@ def save_storage_state(
 def api_token_required_for_unsafe_methods(
     request: Request,
     api_token: Annotated[
-        str,
-        Header(alias="x-auth-token"),
-    ] = "",
+        HTTPAuthorizationCredentials | None,
+        Depends(static_api_token),
+    ] = None,
 ):
     if request.method not in UNSAFE_METHODS:
         return
 
-    if api_token not in API_TOKENS:
+    if not api_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="API token is required",
+        )
+
+    if api_token.credentials not in API_TOKENS:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid API token",
