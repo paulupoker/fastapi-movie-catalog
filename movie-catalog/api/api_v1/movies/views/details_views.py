@@ -23,7 +23,7 @@ router = APIRouter(
             "content": {
                 "application/json": {
                     "example": {
-                        "detail": f"Movie with slug 'slug' not found",
+                        "detail": "Movie with slug 'slug' not found",
                     },
                 },
             },
@@ -41,9 +41,7 @@ MovieBySlug = Annotated[
     "/",
     response_model=MovieRead,
 )
-def read_movie(
-    movie: MovieBySlug,
-) -> Movie:
+def read_movie(movie: MovieBySlug) -> Movie:
     return movie
 
 
@@ -79,7 +77,5 @@ def update_movie_details_partial(
     "/",
     status_code=status.HTTP_204_NO_CONTENT,
 )
-def delete_movie(
-    movie: MovieBySlug,
-) -> None:
+def delete_movie(movie: MovieBySlug) -> None:
     storage.delete(movie=movie)
