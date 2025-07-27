@@ -8,14 +8,19 @@ Right click `movie-catalog` -> Mark Directory as -> Sources Root
 
 ### Run
 
+Go to workdir:
+
 ```shell
 cd movie-catalog
 ```
-#### Development
+
+Run dev server:
 ```shell
 fastapi dev
 ```
-#### Production
+
+## Snippets
+
 ```shell
-fastapi run
+python -c 'import secrets;print(secrets.token_urlsafe(16))'
 ```
