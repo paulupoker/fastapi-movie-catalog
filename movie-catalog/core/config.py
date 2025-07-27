@@ -9,16 +9,16 @@ LOG_FORMAT: str = (
     "[%(asctime)s.%(msecs)03d] %(module)10s:%(lineno)-3d %(levelname)-7s - %(message)s"
 )
 
-API_TOKENS = frozenset(
-    {
-        "49n6HebSj2IFY38Jhy86vg",
-        "m-7cYwRXP9crTPWOHLRqgQ",
-        "RuvekGOLFLxvAY8lFF7FuQ",
-    }
-)
-
 USERS_DB: dict[str, str] = {
     # username: password
     "alice": "password",
     "bob": "qwerty",
 }
+
+
+REDIS_HOST = "localhost"
+REDIS_PORT = 6379
+REDIS_DB = 0
+REDIS_DB_TOKENS = 1
+
+REDIS_TOKENS_SET_NAME = "tokens"
