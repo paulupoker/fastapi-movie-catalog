@@ -68,7 +68,7 @@ class MovieUpdate(MovieBase):
     rating: RatingFloat
 
 
-class MoviePartialUpdate(MovieBase):
+class MoviePartialUpdate(BaseModel):
     """
     Model for partial movie update.
     """
