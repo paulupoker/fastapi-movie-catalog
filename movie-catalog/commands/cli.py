@@ -12,9 +12,8 @@ app = typer.Typer(
 
 
 @app.callback()
-def callback():
+def callback() -> None:
     """
-
     Some CLI management commands.
     """
 

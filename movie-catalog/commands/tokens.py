@@ -19,7 +19,7 @@ def check(
         str,
         typer.Argument(help="The token to check"),
     ],
-):
+) -> None:
     """
     Check if the passed token is valid - exists or not.
     """
@@ -34,7 +34,7 @@ def check(
 
 
 @app.command(name="list")
-def list_tokens():
+def list_tokens() -> None:
     """
     List all tokens.
     """
@@ -44,7 +44,7 @@ def list_tokens():
 
 
 @app.command()
-def create():
+def create() -> None:
     """
     Create a new token and save to database.
     """
@@ -58,7 +58,7 @@ def add(
         str,
         typer.Argument(help="The token to add"),
     ],
-):
+) -> None:
     """
     Add the provided token to database.
     """
@@ -72,7 +72,7 @@ def delete(
         str,
         typer.Argument(help="The token to delete"),
     ],
-):
+) -> None:
     """
     Delete the provided token from database.
     """

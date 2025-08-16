@@ -52,7 +52,7 @@ def read_movie(movie: MovieBySlug) -> Movie:
 def update_movie_details(
     movie: MovieBySlug,
     movie_in: MovieUpdate,
-):
+) -> Movie:
     return storage.update(
         movie=movie,
         movie_in=movie_in,
