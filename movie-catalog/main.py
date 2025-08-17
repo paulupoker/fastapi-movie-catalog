@@ -1,11 +1,10 @@
 import logging
 
+import uvicorn
 from fastapi import (
     FastAPI,
     Request,
 )
-
-import uvicorn
 
 from api import router as api_router
 from app_lifespan import lifespan

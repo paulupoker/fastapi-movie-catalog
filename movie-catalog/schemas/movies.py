@@ -1,9 +1,10 @@
+from typing import Annotated
+
 from pydantic import (
-    BaseModel,
     AnyHttpUrl,
+    BaseModel,
     Field,
 )
-from typing import Annotated
 
 SlugString = Annotated[str, Field(min_length=3, max_length=30)]
 TitleString = Annotated[str, Field(min_length=2, max_length=100)]

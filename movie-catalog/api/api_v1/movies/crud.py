@@ -1,16 +1,16 @@
-from redis import Redis
+import logging
+
 from pydantic import (
     BaseModel,
 )
-
-import logging
+from redis import Redis
 
 from core import config
 from schemas.movies import (
     Movie,
     MovieCreate,
-    MovieUpdate,
     MoviePartialUpdate,
+    MovieUpdate,
 )
 
 logger = logging.getLogger(__name__)

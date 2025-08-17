@@ -1,4 +1,5 @@
 from typing import Annotated
+
 import typer
 from rich import print
 from rich.markdown import Markdown
