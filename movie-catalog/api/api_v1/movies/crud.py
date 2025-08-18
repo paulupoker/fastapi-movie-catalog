@@ -30,7 +30,7 @@ class MovieBaseError(Exception):
     """
 
 
-class MovieAlreadyExists(MovieBaseError):
+class MovieAlreadyExistsError(MovieBaseError):
     """
     Raised movie creation if such slug already exists.
     """
@@ -75,7 +75,7 @@ class MoviesStorage(BaseModel):
     def create_or_raise_if_exists(self, movie_in: MovieCreate) -> Movie:
         if not self.exists(movie_in.slug):
             return self.create(movie_in)
-        raise MovieAlreadyExists(movie_in.slug)
+        raise MovieAlreadyExistsError(movie_in.slug)
 
     def delete_by_slug(self, slug: str) -> None:
         if redis.hdel(config.REDIS_MOVIES_HASH_NAME, slug):
