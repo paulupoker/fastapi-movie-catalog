@@ -34,6 +34,32 @@ class MovieCreateTestCase(TestCase):
         self.assertEqual(movie_in.rating, movie.rating)
         self.assertEqual(movie_in.url, movie.url)
 
+    def test_movie_create_accepts_different_titles_lengths(self) -> None:
+        titles = [
+            "Test Movie",
+            "Ttt",
+            "T",
+            "Test MovieTest MovieTest MovieTest MovieTestMovieTestMovieTest"
+            "MovieTest MovieTest MovieTest MovieTerr",
+            "Test MovieTest MovieTest MovieTest MovieTest MovieTestMovieTest"
+            " MovieTest MovieTest MovieTest MovieT",
+        ]
+
+        for title in titles:
+            with self.subTest(title=title):
+                movie_create = MovieCreate(
+                    slug="test_movie",
+                    title=title,
+                    description="Test description",
+                    genre="Test genre",
+                    year=2025,
+                    director="DirectorString",
+                    rating=8.0,
+                    url=AnyHttpUrl("https://www.example.com"),
+                )
+
+                self.assertEqual(title, movie_create.title)
+
 
 class MovieUpdateTestCase(TestCase):
     def test_movie_can_be_updated(self) -> None:
