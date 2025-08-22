@@ -37,12 +37,10 @@ class MovieCreateTestCase(TestCase):
     def test_movie_create_accepts_different_titles_lengths(self) -> None:
         titles = [
             "Test Movie",
-            "Ttt",
+            "TTT",
             "T",
-            "Test MovieTest MovieTest MovieTest MovieTestMovieTestMovieTest"
-            "MovieTest MovieTest MovieTest MovieTerr",
-            "Test MovieTest MovieTest MovieTest MovieTest MovieTestMovieTest"
-            " MovieTest MovieTest MovieTest MovieT",
+            "T" * 101,
+            "T" * 100,
         ]
 
         for title in titles:
