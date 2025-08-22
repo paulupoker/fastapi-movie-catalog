@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from pydantic import AnyHttpUrl
+from pydantic import AnyHttpUrl, ValidationError
 
 from schemas.movies import (
     Movie,
@@ -57,6 +57,43 @@ class MovieCreateTestCase(TestCase):
                 )
 
                 self.assertEqual(title, movie_create.title)
+
+    def test_movie_slug_too_short(self) -> None:
+        with self.assertRaises(ValidationError) as exc_info:
+            MovieCreate(
+                slug="t",
+                title="Test Movie",
+                description="Test description",
+                genre="Test genre",
+                year=2025,
+                director="DirectorString",
+                rating=8.0,
+                url=AnyHttpUrl("https://www.example.com"),
+            )
+
+        error_details = exc_info.exception.errors()[0]
+        expected_errors = "string_too_short"
+
+        self.assertEqual(
+            expected_errors,
+            error_details["type"],
+        )
+
+    def test_movie_slug_too_short_with_regex(self) -> None:
+        with self.assertRaisesRegex(
+            ValidationError,
+            expected_regex="String should have at least 3 characters",
+        ):
+            MovieCreate(
+                slug="t",
+                title="Test Movie",
+                description="Test description",
+                genre="Test genre",
+                year=2025,
+                director="DirectorString",
+                rating=8.0,
+                url=AnyHttpUrl("https://www.example.com"),
+            )
 
 
 class MovieUpdateTestCase(TestCase):
