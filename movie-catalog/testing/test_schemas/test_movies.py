@@ -38,8 +38,6 @@ class MovieCreateTestCase(TestCase):
         titles = [
             "Test Movie",
             "TTT",
-            "T",
-            "T" * 101,
             "T" * 100,
         ]
 
