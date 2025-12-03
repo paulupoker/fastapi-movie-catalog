@@ -1,6 +1,5 @@
 import random
 import string
-from os import getenv
 from typing import ClassVar
 from unittest import TestCase
 
@@ -13,10 +12,6 @@ from schemas.movies import (
     MoviePartialUpdate,
     MovieUpdate,
 )
-
-if getenv("TESTING") != "1":
-    msg = "Environment is not ready for testing."
-    raise OSError(msg)
 
 
 def create_movie() -> Movie:
