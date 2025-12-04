@@ -3,10 +3,10 @@ import logging
 import uvicorn
 from fastapi import (
     FastAPI,
-    Request,
 )
 
 from api import router as api_router
+from api.main_views import router as main_router
 from app_lifespan import lifespan
 from core import config
 
@@ -22,14 +22,7 @@ app = FastAPI(
 )
 
 app.include_router(api_router)
-
-
-@app.get("/")
-def get_docs(request: Request) -> dict[str, str]:
-    docs_url = request.url.replace(path="/docs")
-    return {
-        "docs": str(docs_url),
-    }
+app.include_router(main_router)
 
 
 if __name__ == "__main__":
