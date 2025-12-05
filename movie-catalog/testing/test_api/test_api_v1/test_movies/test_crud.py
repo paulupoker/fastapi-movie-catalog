@@ -3,9 +3,13 @@ import string
 from typing import ClassVar
 from unittest import TestCase
 
+import pytest
 from pydantic import AnyHttpUrl
 
-from api.api_v1.movies.crud import storage
+from api.api_v1.movies.crud import (
+    MovieAlreadyExistsError,
+    storage,
+)
 from schemas.movies import (
     Movie,
     MovieCreate,
@@ -26,6 +30,11 @@ def create_movie() -> Movie:
         slug="".join(random.choices(string.ascii_letters, k=8)),
     )
     return storage.create(movie_in)
+
+
+@pytest.fixture()
+def movie() -> Movie:
+    return create_movie()
 
 
 class MoviesStorageUpdateTestCase(TestCase):
@@ -100,3 +109,14 @@ class MoviesStorageGetMoviesTestCase(TestCase):
             ):
                 db_movie = storage.get_by_slug(movie.slug)
                 self.assertEqual(movie, db_movie)
+
+
+def test_create_or_raise_if_exists(movie: Movie) -> None:
+    movie_create = MovieCreate(**movie.model_dump())
+    with pytest.raises(
+        MovieAlreadyExistsError,
+        match=movie_create.slug,
+    ) as exc_info:
+        storage.create_or_raise_if_exists(movie_create)
+
+    assert exc_info.value.args[0] == movie_create.slug
