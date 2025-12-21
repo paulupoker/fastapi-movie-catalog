@@ -1,11 +1,7 @@
-import random
-import string
-from collections.abc import Generator
 from typing import ClassVar
 from unittest import TestCase
 
 import pytest
-from pydantic import AnyHttpUrl
 
 from api.api_v1.movies.crud import (
     MovieAlreadyExistsError,
@@ -17,27 +13,7 @@ from schemas.movies import (
     MoviePartialUpdate,
     MovieUpdate,
 )
-
-
-def create_movie() -> Movie:
-    movie_in = MovieCreate(
-        title="Slug",
-        description="SlugSlugSlug",
-        genre="Slug",
-        year=2020,
-        director="Slug Slug",
-        rating=8.0,
-        url=AnyHttpUrl("https://www.example.com"),
-        slug="".join(random.choices(string.ascii_letters, k=8)),
-    )
-    return storage.create(movie_in)
-
-
-@pytest.fixture()
-def movie() -> Generator[Movie]:
-    movie = create_movie()
-    yield movie
-    storage.delete(movie)
+from testing.conftest import create_movie
 
 
 class MoviesStorageUpdateTestCase(TestCase):
