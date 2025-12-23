@@ -1,12 +1,16 @@
 import random
 import string
+from typing import Any
 
+import pytest
+from _pytest.fixtures import SubRequest
 from fastapi import status
 from fastapi.testclient import TestClient
 from pydantic import AnyHttpUrl
 
 from main import app
 from schemas.movies import Movie, MovieCreate
+from testing.conftest import build_movie_create_random_slug
 
 
 def test_create_movie(auth_client: TestClient) -> None:
@@ -38,3 +42,32 @@ def test_create_movie_already_exists(auth_client: TestClient, movie: Movie) -> N
     response_data = response.json()
     expected_error_detail = f"Movie with slug {movie.slug!r} already exists"
     assert response_data["detail"] == expected_error_detail, response_data
+
+
+class TestCreateInvalid:
+    @pytest.fixture(
+        params=[
+            pytest.param(("a", "string_too_short"), id="too-short-slug"),
+            pytest.param(("a" * 31, "string_too_long"), id="too-long-slug"),
+        ]
+    )
+    def movie_create_values(self, request: SubRequest) -> tuple[dict[str, Any], str]:
+        build = build_movie_create_random_slug()
+        data = build.model_dump(mode="json")
+        slug, err_type = request.param
+        data["slug"] = slug
+        return data, err_type
+
+    def test_invalid_slug(
+        self,
+        auth_client: TestClient,
+        movie_create_values: tuple[dict[str, Any], str],
+    ) -> None:
+        url = app.url_path_for("create_movie")
+        create_data, expected_error_type = movie_create_values
+        response = auth_client.post(url=url, json=create_data)
+        assert (
+            response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        ), response.text
+        error_detail = response.json()["detail"][0]
+        assert error_detail["type"] == expected_error_type, error_detail
