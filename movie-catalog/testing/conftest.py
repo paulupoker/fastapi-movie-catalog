@@ -13,10 +13,10 @@ if getenv("TESTING") != "1":
     pytest.exit("Environment is not ready for testing.")
 
 
-def build_movie_create(slug: str) -> MovieCreate:
+def build_movie_create(slug: str, description: str = "Description") -> MovieCreate:
     return MovieCreate(
         title="Slug",
-        description="Description",
+        description=description,
         genre="Genre",
         year=2020,
         director="Director Director",
@@ -26,19 +26,20 @@ def build_movie_create(slug: str) -> MovieCreate:
     )
 
 
-def build_movie_create_random_slug() -> MovieCreate:
+def build_movie_create_random_slug(description: str = "Description") -> MovieCreate:
     return build_movie_create(
         slug="".join(random.choices(string.ascii_letters, k=8)),
+        description=description,
     )
 
 
-def create_movie(slug: str) -> Movie:
-    movie_in = build_movie_create(slug)
+def create_movie(slug: str, description: str = "Description") -> Movie:
+    movie_in = build_movie_create(slug, description=description)
     return storage.create(movie_in)
 
 
-def create_movie_random_slug() -> Movie:
-    movie_in = build_movie_create_random_slug()
+def create_movie_random_slug(description: str = "Description") -> Movie:
+    movie_in = build_movie_create_random_slug(description=description)
     return storage.create(movie_in)
 
 

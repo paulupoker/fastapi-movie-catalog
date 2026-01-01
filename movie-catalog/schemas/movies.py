@@ -6,9 +6,11 @@ from pydantic import (
     Field,
 )
 
+DESCRIPTION_MAX_LENGTH = 1000
+
 SlugString = Annotated[str, Field(min_length=3, max_length=30)]
 TitleString = Annotated[str, Field(min_length=2, max_length=100)]
-DescriptionString = Annotated[str, Field(min_length=2, max_length=1000)]
+DescriptionString = Annotated[str, Field(max_length=DESCRIPTION_MAX_LENGTH)]
 GenreString = Annotated[str, Field(min_length=2, max_length=100)]
 YearInt = Annotated[int, Field(ge=1900, le=3000)]
 DirectorString = Annotated[str, Field(min_length=2, max_length=100)]
