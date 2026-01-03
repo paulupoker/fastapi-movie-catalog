@@ -1,19 +1,10 @@
-from fastapi import (
-    APIRouter,
-    Depends,
-    HTTPException,
-    status,
-)
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from api.api_v1.movies.crud import MovieAlreadyExistsError, storage
 from api.api_v1.movies.dependencies import (
     api_token_or_user_basic_auth_required_for_unsafe_methods,
 )
-from schemas.movies import (
-    Movie,
-    MovieCreate,
-    MovieRead,
-)
+from schemas.movies import Movie, MovieCreate, MovieRead
 
 router = APIRouter(
     prefix="/movies",
@@ -43,10 +34,7 @@ router = APIRouter(
 )
 
 
-@router.get(
-    "/",
-    response_model=list[MovieRead],
-)
+@router.get("/", response_model=list[MovieRead])
 def read_movie_list() -> list[Movie]:
     return storage.get()
 
