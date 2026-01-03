@@ -80,7 +80,7 @@ class MovieCreateTestCase(TestCase):
     def test_movie_slug_too_short_with_regex(self) -> None:
         with self.assertRaisesRegex(
             ValidationError,
-            expected_regex="String should have at least 3 characters",
+            expected_regex="String should have at least 2 characters",
         ):
             MovieCreate(
                 slug="t",

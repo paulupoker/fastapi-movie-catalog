@@ -7,49 +7,66 @@ from fastapi.testclient import TestClient
 
 from api.api_v1.movies.crud import storage
 from main import app
-from schemas.movies import DESCRIPTION_MAX_LENGTH, Movie
+from schemas.movies import (
+    DESCRIPTION_MAX_LENGTH,
+    TITLE_MAX_LENGTH,
+    TITLE_MIN_LENGTH,
+    Movie,
+)
 from testing.conftest import create_movie_random_slug
 
 
 class TestUpdatePartial:
     @pytest.fixture()
     def movie(self, request: SubRequest) -> Generator[Movie]:
-        movie = create_movie_random_slug(request.param)
+        title, description = request.param
+        movie = create_movie_random_slug(title=title, description=description)
         yield movie
         storage.delete(movie)
 
     @pytest.mark.parametrize(
-        "movie, new_description",
+        "movie, new_title, new_description",
         [
             pytest.param(
-                "description",
-                "",
-                id="text_description_to_empty_description",
+                ("some_title", "some_description"),
+                "some_title",
+                "some_description",
+                id="some_params",
             ),
             pytest.param(
-                "",
-                "description",
-                id="empty_description_to_text_description",
+                ("old_title", "old_description"),
+                "new_title",
+                "new_description",
+                id="new_params",
             ),
             pytest.param(
+                ("new_title", "new_description"),
+                "a" * TITLE_MIN_LENGTH,
+                "",
+                id="min_params",
+            ),
+            pytest.param(
+                ("a" * TITLE_MIN_LENGTH, ""),
+                "a" * TITLE_MAX_LENGTH,
                 "a" * DESCRIPTION_MAX_LENGTH,
-                "",
-                id="max_description_to_empty_description",
-            ),
-            pytest.param(
-                "",
-                "a" * DESCRIPTION_MAX_LENGTH,
-                id="empty_description_to_max_description",
+                id="max_params",
             ),
         ],
         indirect=["movie"],
     )
     def test_update_movie_details_partial(
-        self, movie: Movie, new_description: str, auth_client: TestClient
+        self,
+        movie: Movie,
+        new_title: str,
+        new_description: str,
+        auth_client: TestClient,
     ) -> None:
         url = app.url_path_for("update_movie_details_partial", slug=movie.slug)
+        new_title = movie.title
         new_description = movie.description
-        response = auth_client.patch(url, json={"description": new_description})
+        response = auth_client.patch(
+            url, json={"title": new_title, "description": new_description}
+        )
         assert response.status_code == status.HTTP_200_OK, response.text
         movie_db = storage.get_by_slug(movie.slug)
         assert movie_db
