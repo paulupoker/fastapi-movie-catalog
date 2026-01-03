@@ -9,8 +9,11 @@ from pydantic import AnyHttpUrl
 from api.api_v1.movies.crud import storage
 from schemas.movies import Movie, MovieCreate
 
-if getenv("TESTING") != "1":
-    pytest.exit("Environment is not ready for testing.")
+
+@pytest.fixture(scope="session", autouse=True)
+def check_testing_env() -> None:
+    if getenv("TESTING") != "1":
+        pytest.exit("Environment is not ready for testing.")
 
 
 def build_movie_create(
