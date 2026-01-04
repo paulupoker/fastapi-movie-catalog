@@ -24,9 +24,12 @@ dev = [
 # PYTEST SETTINGS
 [tool.pytest.ini_options]
 minversion = "8.4"
-addopts = "-ra"
+addopts = "-ra --strict-markers"
 log_cli = false
 log_cli_level = "INFO"
+markers = [
+    "apitest: test any http api call",
+]
 
 # MYPY SETTINGS
 [tool.mypy]

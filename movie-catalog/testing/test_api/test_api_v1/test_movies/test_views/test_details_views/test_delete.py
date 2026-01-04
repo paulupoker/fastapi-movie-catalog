@@ -20,6 +20,7 @@ def movie(request: SubRequest) -> Movie:
     return create_movie(request.param)
 
 
+@pytest.mark.apitest
 def test_delete(movie: Movie, auth_client: TestClient) -> None:
     url = app.url_path_for("delete_movie", slug=movie.slug)
     response = auth_client.delete(url=url)
