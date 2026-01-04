@@ -1,29 +1,31 @@
-# FastAPI Movie Catalog
+# 🎞️ FastAPI Movie Catalog
 
-## Develop
+##  👨🏻‍💻 Develop
+
+### 💾 Setup
 
 Check GitHub Actions after any push.
 
 ### Setup
+Right click `movie-catalog` → Mark Directory as → Sources Root
 
-Right click `movie-catalog` -> Mark Directory as -> Sources Root
+### 💿 Install dependencies
 
-### Configure pre-commit
+Install all packages:
+
+```shell
+uv sync
+```
+
+### ⚙️ Configure pre-commit
 
 Install pre-commit hook:
+
 ```shell
 pre-commit install
 ```
 
-### Install
-
-Install packages:
-
-```shell
-uv install
-```
-
-### Run
+### 🏃🏻 Run
 
 Go to workdir:
 
@@ -39,5 +41,5 @@ fastapi dev
 ## Snippets
 
 ```shell
-python -c 'import secrets;print(secrets.token_urlsafe(16))'
+python -c 'import secrets; print(secrets.token_urlsafe(16))'
 ```
