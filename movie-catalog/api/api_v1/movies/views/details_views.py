@@ -46,3 +46,8 @@ def update_movie_details_partial(
 @router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
 def delete_movie(movie: MovieBySlug) -> None:
     storage.delete(movie=movie)
+
+
+@router.post("/transfer/")
+def transfer_movie() -> None:
+    raise NotImplementedError

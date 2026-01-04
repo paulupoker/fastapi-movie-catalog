@@ -30,6 +30,7 @@ log_cli_level = "INFO"
 markers = [
     "apitest: test any http api call",
 ]
+xfail_strict = true
 
 # MYPY SETTINGS
 [tool.mypy]
