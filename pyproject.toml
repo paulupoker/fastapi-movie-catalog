@@ -160,6 +160,6 @@ unfixable = []
 "**/test_*.py" = [
     "S311", # suspicious-non-cryptographic-random-usage (S311)
 ]
-#"**/conftest.py" = [
-#    "S311", # suspicious-non-cryptographic-random-usage (S311)
-#]
+"**/conftest.py" = [
+    "S311", # suspicious-non-cryptographic-random-usage (S311)
+]
