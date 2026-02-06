@@ -12,7 +12,7 @@ on:
       - "movie-catalog/**"
 
 jobs:
-  run-black:
+  run-checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -25,13 +25,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install "black==26.1.0"
 
-      - name: Black
+      - name: Run Black
         run: black --check --diff ./
-  run-mypy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
       - name: Setup uv
         uses: astral-sh/setup-uv@v7
         with:
@@ -39,5 +34,15 @@ jobs:
           enable-cache: true
       - name: Install the project
         run: uv sync --locked --all-extras --dev
+      - name: Run ruff with --diff
+        uses: astral-sh/ruff-action@v3
+        with:
+          args: 'check --diff'
+          version-file: 'pyproject.toml'
+      - name: Run ruff
+        uses: astral-sh/ruff-action@v3
+        with:
+          args: 'check'
+          version-file: 'pyproject.toml'
       - name: Run mypy
         run: uv run mypy movie-catalog
