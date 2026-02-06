@@ -9,6 +9,8 @@ redis = Redis(
     decode_responses=True,
 )
 
+1 + ""
+
 
 def main() -> None:
     print(redis.ping())
