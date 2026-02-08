@@ -4,9 +4,6 @@
 
 ### 💾 Setup
 
-Check GitHub Actions after any push.
-
-### Setup
 Right click `movie-catalog` → Mark Directory as → Sources Root
 
 ### 💿 Install dependencies
