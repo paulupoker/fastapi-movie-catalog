@@ -6,12 +6,12 @@ from fastapi import FastAPI
 from api import router as api_router
 from api.main_views import router as main_router
 from app_lifespan import lifespan
-from core import config
+from core.config import settings
 
 logging.basicConfig(
-    level=config.LOG_LEVEL,
-    format=config.LOG_FORMAT,
-    datefmt="%Y-%m-%d %H:%M:%S",
+    level=settings.logging.log_level,
+    format=settings.logging.log_format,
+    datefmt=settings.logging.date_format,
 )
 
 app = FastAPI(title="Movie Catalog", lifespan=lifespan)
